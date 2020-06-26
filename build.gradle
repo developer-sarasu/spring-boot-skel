@@ -4,31 +4,20 @@ buildscript {
 		maven { url "https://plugins.gradle.org/m2" }
 		maven { url "https://repo.spring.io/plugins-release" }
 	}
+
+	dependencies {
+		classpath("io.spring.gradle:dependency-management-plugin:${springGradleDependencyManagementVersion}")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+		classpath("org.flywaydb:flyway-gradle-plugin:${flywayDbVersion}")
+	}
 }
 
 List spockDependency = [
-		"org.codehaus.groovy:groovy-all:$groovy",
-		"org.springframework.boot:spring-boot-starter-test",
-		"org.spockframework:spock-core:$spock",
-		"org.spockframework:spock-spring:$spock"
+		"org.codehaus.groovy:groovy-all:${groovyVersion}",
+		"org.spockframework:spock-core:${spockVersion}",
+		"org.spockframework:spock-spring:${spockVersion}"
 ]
-
-project(':skeleton-core') {
-	dependencies {
-	}
-}
-
-project(':skeleton-domain') {
-	dependencies {
-		compile project(':skeleton-core')
-	}
-}
-
-project(":skeleton-api") {
-	dependencies {
-		compile project(':skeleton-domain')
-	}
-}
 
 subprojects {
 	apply plugin: 'java'
@@ -38,6 +27,13 @@ subprojects {
 	apply plugin: 'idea'
 
 	sourceCompatibility = 11
+
+	repositories {
+		jcenter()
+		mavenCentral()
+		maven { url "https://plugins.gradle.org/m2/" }
+		maven { url "https://repo.spring.io/plugins-release" }
+	}
 
 	task initSourceFolders {
 		sourceSets*.java.srcDirs*.each {
@@ -53,7 +49,7 @@ subprojects {
 		}
 	}
 
-	test {
+	test{
 
 	}
 
@@ -62,9 +58,25 @@ subprojects {
 		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 		compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-		annotationProcessor("org.projectlombok:lombok:$lombok")
-		compile "org.projectlombok:lombok:$lombok"
+		annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+		compile "org.projectlombok:lombok:$lombokVersion"
 
 		testCompile spockDependency
+	}
+}
+project(":skeleton-core") {
+	dependencies {}
+}
+
+project(":skeleton-domain") {
+	dependencies {
+		compile project(":skeleton-core")
+	}
+}
+
+project(":skeleton-api") {
+	dependencies {
+		compile project(":skeleton-core")
+		compile project(":skeleton-domain")
 	}
 }
