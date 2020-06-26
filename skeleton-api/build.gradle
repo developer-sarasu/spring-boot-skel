@@ -1,0 +1,5 @@
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-web"
+	compile "io.springfox:springfox-swagger2:$swagger"
+	compile "io.springfox:springfox-swagger-ui:$swagger"
+}

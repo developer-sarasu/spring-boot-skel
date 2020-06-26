@@ -1,0 +1,70 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { url "https://plugins.gradle.org/m2" }
+		maven { url "https://repo.spring.io/plugins-release" }
+	}
+}
+
+List spockDependency = [
+		"org.codehaus.groovy:groovy-all:$groovy",
+		"org.springframework.boot:spring-boot-starter-test",
+		"org.spockframework:spock-core:$spock",
+		"org.spockframework:spock-spring:$spock"
+]
+
+project(':skeleton-core') {
+	dependencies {
+	}
+}
+
+project(':skeleton-domain') {
+	dependencies {
+		compile project(':skeleton-core')
+	}
+}
+
+project(":skeleton-api") {
+	dependencies {
+		compile project(':skeleton-domain')
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'groovy'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'idea'
+
+	sourceCompatibility = 11
+
+	task initSourceFolders {
+		sourceSets*.java.srcDirs*.each {
+			if (!it.exists()) {
+				it.mkdirs()
+			}
+		}
+
+		sourceSets*.resources.srcDirs*.each {
+			if (!it.exists()) {
+				it.mkdirs()
+			}
+		}
+	}
+
+	test {
+
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+		compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+		annotationProcessor("org.projectlombok:lombok:$lombok")
+		compile "org.projectlombok:lombok:$lombok"
+
+		testCompile spockDependency
+	}
+}
