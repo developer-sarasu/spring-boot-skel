@@ -1,2 +1,5 @@
+apply plugin: 'flyway'
+apply plugin: "jpa-schema-generate"
+
 dependencies {
 }
