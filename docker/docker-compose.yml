@@ -1,0 +1,95 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 80:80
+    - 443:443
+    volumes:
+    - /Users/sarasu/docker
+    network_mode: "host"
+  app:
+    image: openjdk:11.0.7-jre-slim
+    container_name: app
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 8080
+    volumes:
+    - /Users/sarasu/docker
+    command:
+      nohup java -Dspring.profile.active=local -jar /Users/sarasu/docker/web-apps/app.jar >> /Users/sarasu/docker/logs/bootApp/app.log 2>&1 &
+  mysql:
+    image: mysql:5.7.30
+    container_name: mysql
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 3306:3306
+    volumes:
+    - /Users/sarasu/docker
+  redis:
+    image: redis:6.0.5-alpine3.12
+    container_name: redis
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 6379:6379
+    volumes:
+    - /Users/sarasu/docker
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+    container_name: elasticsearch
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - /Users/sarasu/docker
+  kibana:
+    image: kibana:7.8.0
+    container_name: kibana
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+      - 5601:5601
+    volumes:
+      - /Users/sarasu/docker
+  jenkins:
+    image: jenkins:2.60.3-alpine
+    container_name: jenkins
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 8800:8080
+    volumes:
+    - /Users/sarasu/docker
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 9092:9092
+    volumes:
+      - /Users/sarasu/docker
+  cassandra:
+    image: cassandra:3.11.6
+    container_name: cassandra
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 7000:7000
+    volumes:
+      - /Users/sarasu/docker
+  mongodb:
+    image: mongo:4.2.8
+    container_name: mongodb
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+    - 27017:27017
